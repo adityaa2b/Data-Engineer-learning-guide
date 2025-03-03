@@ -317,3 +317,13 @@ Left Join: 10
 Right Join: 10
 Full Join: 12
 Cross Join(Cartesian Join): 36
+
+47. What is the difference between EXISTS and IN?
+Answer:
+EXISTS: Returns true if a subquery returns at least one row; stops execution once a match is found.
+IN: Checks if a value exists in a list or subquery; evaluates all values.
+
+48. What is the difference between WHERE and HAVING?
+Answer:
+WHERE filters rows before grouping (used with SELECT, UPDATE, DELETE).
+HAVING filters grouped records (used with GROUP BY).
