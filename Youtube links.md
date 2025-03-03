@@ -37,4 +37,4 @@
 - [Azure synapse](https://youtu.be/vDVcXXfc9e8?si=VE-3ek9jeQr6VITT)
 
 #Docker
-- [Docker in detil](https://youtu.be/pTFZFxd4hOI?si=5do7XD88HWm92RTH)
+- [Docker in detail](https://youtu.be/pTFZFxd4hOI?si=5do7XD88HWm92RTH)
