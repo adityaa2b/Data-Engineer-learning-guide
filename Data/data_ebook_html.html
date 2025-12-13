@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Data - Interactive E-Book</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        const { useState } = React;
+        const e = React.createElement;
+
+        // SVG Icons as components
+        const ChevronLeft = () => e('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            e('polyline', { points: '15 18 9 12 15 6' })
+        );
+
+        const ChevronRight = () => e('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            e('polyline', { points: '9 18 15 12 9 6' })
+        );
+
+        const Menu = () => e('svg', { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            e('line', { x1: 3, y1: 12, x2: 21, y2: 12 }),
+            e('line', { x1: 3, y1: 6, x2: 21, y2: 6 }),
+            e('line', { x1: 3, y1: 18, x2: 21, y2: 18 })
+        );
+
+        const BookOpen = () => e('svg', { width: 28, height: 28, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            e('path', { d: 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z' }),
+            e('path', { d: 'M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z' })
+        );
+
+        const CheckCircle = ({ size = 24 }) => e('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+            e('path', { d: 'M22 11.08V12a10 10 0 1 1-5.93-9.14' }),
+            e('polyline', { points: '22 4 12 14.01 9 11.01' })
+        );
+
+        const Linkedin = () => e('svg', { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'currentColor' },
+            e('path', { d: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' })
+        );
+
+        function DataEBook() {
+            const [currentPage, setCurrentPage] = useState(0);
+            const [completedPages, setCompletedPages] = useState(new Set());
+            const [showMenu, setShowMenu] = useState(false);
+
+            const pages = [
+                {
+                    title: "Welcome",
+                    icon: "📚",
+                    content: e('div', { className: 'space-y-6' },
+                        e('div', { className: 'text-center mb-8' },
+                            e('h1', { className: 'text-4xl font-bold text-blue-600 mb-4' }, 'Introduction to Data'),
+                            e('p', { className: 'text-xl text-gray-600' }, 'LinkedIn Learning Series'),
+                            e('p', { className: 'text-lg text-gray-500 mt-2' }, 'by Aditya Bhutada')
+                        ),
+                        e('div', { className: 'bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-l-4 border-blue-500' },
+                            e('p', { className: 'text-lg leading-relaxed text-gray-700' },
+                                'Welcome to this interactive learning experience! Navigate through the chapters to discover the fundamentals of data, its importance, and practical applications in today\'s digital world.'
+                            )
+                        ),
+                        e('div', { className: 'grid grid-cols-2 gap-4 mt-8' },
+                            e('div', { className: 'bg-white p-4 rounded-lg shadow-sm border border-gray-200' },
+                                e('div', { className: 'text-3xl mb-2' }, '📖'),
+                                e('div', { className: 'font-semibold text-gray-700' }, '7 Chapters'),
+                                e('div', { className: 'text-sm text-gray-500' }, 'Comprehensive content')
+                            ),
+                            e('div', { className: 'bg-white p-4 rounded-lg shadow-sm border border-gray-200' },
+                                e('div', { className: 'text-3xl mb-2' }, '⏱️'),
+                                e('div', { className: 'font-semibold text-gray-700' }, '15 min read'),
+                                e('div', { className: 'text-sm text-gray-500' }, 'Quick learning')
+                            )
+                        )
+                    )
+                },
+                {
+                    title: "What is Data?",
+                    icon: "❓",
+                    content: e('div', { className: 'space-y-6' },
+                        e('h2', { className: 'text-3xl font-bold text-gray-800 mb-4' }, 'What is Data?'),
+                        e('div', { className: 'bg-blue-50 p-5 rounded-lg border-l-4 border-blue-500' },
+                            e('p', { className: 'text-lg text-gray-700 leading-relaxed' },
+                                'Think of data as raw facts and figures—by themselves, they don\'t tell us much. But once we process and analyze them, they turn into valuable insights that drive smarter decisions. ',
+                                e('span', { className: 'font-semibold text-blue-600' }, 'It tries to tell you a story.')
+                            )
+                        ),
+                        e('div', { className: 'mt-8' },
+                            e('h3', { className: 'text-2xl font-semibold text-gray-800 mb-4' }, 'Types of Data'),
+                            e('div', { className: 'space-y-4' },
+                                e('div', { className: 'bg-white p-5 rounded-lg shadow-sm border-l-4 border-green-500 hover:shadow-md transition-shadow' },
+                                    e('h4', { className: 'text-xl font-semibold text-green-700 mb-2' }, '📊 Structured Data'),
+                                    e('p', { className: 'text-gray-700 mb-2' }, 'Organized in rows and columns (e.g., databases, spreadsheets)'),
+                                    e('div', { className: 'bg-green-50 p-3 rounded mt-2' },
+                                        e('span', { className: 'font-medium text-green-800' }, 'Example: '),
+                                        e('span', { className: 'text-gray-700' }, 'Sales records in Excel')
+                                    )
+                                ),
+                                e('div', { className: 'bg-white p-5 rounded-lg shadow-sm border-l-4 border-purple-500 hover:shadow-md transition-shadow' },
+                                    e('h4', { className: 'text-xl font-semibold text-purple-700 mb-2' }, '💬 Unstructured Data'),
+                                    e('p', { className: 'text-gray-700 mb-2' }, 'Free-form content like text, images, audio, video'),
+                                    e('div', { className: 'bg-purple-50 p-3 rounded mt-2' },
+                                        e('span', { className: 'font-medium text-purple-800' }, 'Example: '),
+                                        e('span', { className: 'text-gray-700' }, 'Tweets or customer reviews')
+                                    )
+                                ),
+                                e('div', { className: 'bg-white p-5 rounded-lg shadow-sm border-l-4 border-orange-500 hover:shadow-md transition-shadow' },
+                                    e('h4', { className: 'text-xl font-semibold text-orange-700 mb-2' }, '🔀 Semi-structured Data'),
+                                    e('p', { className: 'text-gray-700 mb-2' }, 'Hybrid formats such as JSON, XML, or log files'),
+                                    e('div', { className: 'bg-orange-50 p-3 rounded mt-2' },
+                                        e('span', { className: 'font-medium text-orange-800' }, 'Example: '),
+                                        e('span', { className: 'text-gray-700' }, 'Web server logs')
+                                    )
+                                )
+                            )
+                        )
+                    )
+                },
+                {
+                    title: "Why is Data Important?",
+                    icon: "💡",
+                    content: e('div', { className: 'space-y-6' },
+                        e('h2', { className: 'text-3xl font-bold text-gray-800 mb-4' }, 'Why is Data Important?'),
+                        e('div', { className: 'grid gap-5' },
+                            e('div', { className: 'bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg hover:shadow-lg transition-shadow' },
+                                e('div', { className: 'flex items-start gap-4' },
+                                    e('div', { className: 'text-4xl' }, '🎯'),
+                                    e('div', null,
+                                        e('h3', { className: 'text-xl font-semibold text-blue-800 mb-2' }, 'Decision-making'),
+                                        e('p', { className: 'text-gray-700' }, 'Businesses rely on data to guide strategies and make informed choices')
+                                    )
+                                )
+                            ),
+                            e('div', { className: 'bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-lg hover:shadow-lg transition-shadow' },
+                                e('div', { className: 'flex items-start gap-4' },
+                                    e('div', { className: 'text-4xl' }, '🚀'),
+                                    e('div', null,
+                                        e('h3', { className: 'text-xl font-semibold text-purple-800 mb-2' }, 'Innovation'),
+                                        e('p', { className: 'text-gray-700' }, 'AI and machine learning models are powered by data')
+                                    )
+                                )
+                            ),
+                            e('div', { className: 'bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg hover:shadow-lg transition-shadow' },
+                                e('div', { className: 'flex items-start gap-4' },
+                                    e('div', { className: 'text-4xl' }, '⚡'),
+                                    e('div', null,
+                                        e('h3', { className: 'text-xl font-semibold text-green-800 mb-2' }, 'Efficiency'),
+                                        e('p', { className: 'text-gray-700' }, 'Data helps optimize processes and reduce costs')
+                                    )
+                                )
+                            )
+                        ),
+                        e('div', { className: 'bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-lg border-l-4 border-red-500 mt-8' },
+                            e('div', { className: 'flex items-start gap-3' },
+                                e('div', { className: 'text-2xl' }, '🎬'),
+                                e('div', null,
+                                    e('h3', { className: 'text-lg font-semibold text-red-800 mb-2' }, 'Case Study: Netflix'),
+                                    e('p', { className: 'text-gray-700' },
+                                        'Netflix analyzes viewing data to recommend shows and decide which series to produce. This data-driven approach has revolutionized content creation and user experience.'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                },
+                {
+                    title: "The Data Lifecycle",
+                    icon: "🔄",
+                    content: e('div', { className: 'space-y-6' },
+                        e('h2', { className: 'text-3xl font-bold text-gray-800 mb-4' }, 'The Data Lifecycle'),
+                        e('p', { className: 'text-lg text-gray-600 mb-6' }, 'Data goes through several stages before it becomes useful:'),
+                        e('div', { className: 'space-y-4' },
+                            [
+                                { num: 1, title: "Collection", desc: "Gathering raw data from sources (surveys, sensors, transactions)", color: "blue" },
+                                { num: 2, title: "Storage", desc: "Saving data in databases, warehouses, or cloud systems", color: "green" },
+                                { num: 3, title: "Processing", desc: "Cleaning and transforming data into usable formats", color: "purple" },
+                                { num: 4, title: "Analysis", desc: "Applying statistical or AI methods to extract insights", color: "orange" },
+                                { num: 5, title: "Visualization", desc: "Presenting results in charts, dashboards, or reports", color: "pink" },
+                                { num: 6, title: "Decision-making", desc: "Using insights to take actions", color: "red" }
+                            ].map((stage, i) =>
+                                e('div', { key: i, className: `bg-${stage.color}-50 p-5 rounded-lg border-l-4 border-${stage.color}-500 hover:shadow-md transition-shadow` },
+                                    e('div', { className: 'flex items-start gap-4' },
+                                        e('div', { className: `flex-shrink-0 w-10 h-10 rounded-full bg-${stage.color}-500 text-white flex items-center justify-center font-bold text-lg` },
+                                            stage.num
+                                        ),
+                                        e('div', { className: 'flex-1' },
+                                            e('h3', { className: `text-xl font-semibold text-${stage.color}-800 mb-2` }, stage.title),
+                                            e('p', { className: 'text-gray-700' }, stage.desc)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                },
+                {
+                    title: "Key Concepts",
+                    icon: "🔑",
+                    content: e('div', { className: 'space-y-6' },
+                        e('h2', { className: 'text-3xl font-bold text-gray-800 mb-6' }, 'Key Concepts'),
+                        e('div', { className: 'grid gap-4' },
+                            [
+                                { title: "📡 Big Data", desc: "Extremely large datasets that require advanced tools to process", color: "blue" },
+                                { title: "📊 Data Quality", desc: "Accuracy, completeness, and consistency determine reliability", color: "green" },
+                                { title: "🗂️ Metadata", desc: '"Data about data" (e.g., file size, author, creation date)', color: "purple" },
+                                { title: "🛡️ Data Governance", desc: "Framework of policies and processes that ensure proper management, security, and compliance of data", color: "orange" },
+                                { title: "⚙️ Data Engineering", desc: "The practice of designing, building, and maintaining systems that collect, store, and process data efficiently", color: "red" },
+                                { title: "📈 Data Visualization", desc: "The art of representing data through charts and graphics to make insights clear and actionable", color: "pink" }
+                            ].map((concept, i) =>
+                                e('div', { key: i, className: `bg-white p-5 rounded-lg shadow-md border-t-4 border-${concept.color}-500` },
+                                    e('h3', { className: 'text-xl font-semibold text-gray-800 mb-2' }, concept.title),
+                                    e('p', { className: 'text-gray-700' }, concept.desc)
+                                )
+                            )
+                        )
+                    )
+                },
+                {
+                    title: "Practical Applications",
+                    icon: "🎯",
+                    content: e('div', { className: 'space-y-6' },
+                        e('h2', { className: 'text-3xl font-bold text-gray-800 mb-6' }, 'Practical Applications'),
+                        e('div', { className: 'grid gap-5' },
+                            [
+                                { icon: "💼", title: "Business Intelligence", desc: "Dashboards for sales and performance tracking", colors: "from-blue-50 to-indigo-50", textColor: "text-blue-800" },
+                                { icon: "🏥", title: "Healthcare", desc: "Patient records and predictive diagnosis", colors: "from-green-50 to-emerald-50", textColor: "text-green-800" },
+                                { icon: "📱", title: "Social Media", desc: "Analytics for engagement, trends, and sentiment", colors: "from-purple-50 to-pink-50", textColor: "text-purple-800" },
+                                { icon: "💰", title: "Finance", desc: "Risk assessment, fraud detection, algorithmic trading, and personalized financial services", colors: "from-orange-50 to-yellow-50", textColor: "text-orange-800" }
+                            ].map((app, i) =>
+                                e('div', { key: i, className: `bg-gradient-to-r ${app.colors} p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow` },
+                                    e('div', { className: 'flex items-start gap-4' },
+                                        e('div', { className: 'text-4xl' }, app.icon),
+                                        e('div', null,
+                                            e('h3', { className: `text-xl font-semibold ${app.textColor} mb-2` }, app.title),
+                                            e('p', { className: 'text-gray-700' }, app.desc)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                },
+                {
+                    title: "Summary & Next Steps",
+                    icon: "✅",
+                    content: e('div', { className: 'space-y-6' },
+                        e('h2', { className: 'text-3xl font-bold text-gray-800 mb-6' }, 'Summary & Takeaways'),
+                        e('div', { className: 'space-y-4' },
+                            [
+                                'Data is the foundation of modern decision-making',
+                                'Understanding its types and lifecycle is essential before diving deeper',
+                                'Next topic in the series: Data Cleaning & Preparation'
+                            ].map((text, i) =>
+                                e('div', { key: i, className: 'bg-green-50 p-5 rounded-lg border-l-4 border-green-500' },
+                                    e('div', { className: 'flex items-start gap-3' },
+                                        e(CheckCircle, { size: 24 }),
+                                        e('p', { className: 'text-gray-700 text-lg' },
+                                            i === 2 ? [
+                                                'Next topic in the series: ',
+                                                e('span', { key: 'bold', className: 'font-semibold text-green-800' }, 'Data Cleaning & Preparation')
+                                            ] : text
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        e('div', { className: 'bg-gradient-to-r from-blue-500 to-indigo-600 p-8 rounded-lg text-white mt-8' },
+                            e('h3', { className: 'text-2xl font-bold mb-4' }, '📌 Call to Action'),
+                            e('p', { className: 'text-lg mb-6' }, 'Follow this LinkedIn Learning Series for more insights into the world of Data!'),
+                            e('a', {
+                                href: 'https://www.linkedin.com/in/aditya-bhutada94/',
+                                target: '_blank',
+                                rel: 'noopener noreferrer',
+                                className: 'inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors'
+                            },
+                                e(Linkedin),
+                                'Connect with Aditya Bhutada'
+                            )
+                        ),
+                        e('div', { className: 'text-center mt-8 p-6 bg-gray-50 rounded-lg' },
+                            e('p', { className: 'text-lg text-gray-600 mb-2' }, '🎉 Congratulations on completing the course!'),
+                            e('p', { className: 'text-gray-500' }, "You've mastered the fundamentals of data")
+                        )
+                    )
+                }
+            ];
+
+            const handlePageChange = (newPage) => {
+                const newCompleted = new Set(completedPages);
+                newCompleted.add(currentPage);
+                setCompletedPages(newCompleted);
+                setCurrentPage(newPage);
+                setShowMenu(false);
+                window.scrollTo(0, 0);
+            };
+
+            const progress = ((completedPages.size + 1) / pages.length) * 100;
+
+            return e('div', { className: 'min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50' },
+                // Header
+                e('div', { className: 'bg-white shadow-md sticky top-0 z-10' },
+                    e('div', { className: 'max-w-4xl mx-auto px-4 py-4' },
+                        e('div', { className: 'flex items-center justify-between mb-2' },
+                            e('div', { className: 'flex items-center gap-3' },
+                                e(BookOpen),
+                                e('div', null,
+                                    e('h1', { className: 'text-xl font-bold text-gray-800' }, 'Introduction to Data'),
+                                    e('p', { className: 'text-sm text-gray-500' }, 'by Aditya Bhutada')
+                                )
+                            ),
+                            e('button', {
+                                onClick: () => setShowMenu(!showMenu),
+                                className: 'p-2 hover:bg-gray-100 rounded-lg transition-colors'
+                            }, e(Menu))
+                        ),
+                        e('div', { className: 'w-full bg-gray-200 rounded-full h-2' },
+                            e('div', {
+                                className: 'bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-500',
+                                style: { width: `${progress}%` }
+                            })
+                        ),
+                        e('p', { className: 'text-xs text-gray-500 mt-1 text-right' },
+                            `${Math.round(progress)}% Complete`
+                        )
+                    )
+                ),
+
+                // Menu
+                showMenu && e('div', {
+                    className: 'fixed inset-0 bg-black bg-opacity-50 z-20',
+                    onClick: () => setShowMenu(false)
+                },
+                    e('div', {
+                        className: 'absolute right-0 top-0 h-full w-80 bg-white shadow-2xl p-6 overflow-y-auto',
+                        onClick: (ev) => ev.stopPropagation()
+                    },
+                        e('h2', { className: 'text-2xl font-bold text-gray-800 mb-6' }, 'Table of Contents'),
+                        e('div', { className: 'space-y-2' },
+                            pages.map((page, idx) =>
+                                e('button', {
+                                    key: idx,
+                                    onClick: () => handlePageChange(idx),
+                                    className: `w-full text-left p-4 rounded-lg transition-all ${
+                                        currentPage === idx
+                                            ? 'bg-blue-500 text-white shadow-lg'
+                                            : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                                    }`
+                                },
+                                    e('div', { className: 'flex items-center gap-3' },
+                                        e('span', { className: 'text-2xl' }, page.icon),
+                                        e('div', { className: 'flex-1' },
+                                            e('div', { className: 'font-semibold' }, page.title),
+                                            e('div', { className: 'text-xs opacity-75' }, `Chapter ${idx + 1}`)
+                                        ),
+                                        completedPages.has(idx) && e(CheckCircle, { size: 20 })
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+
+                // Main Content
+                e('div', { className: 'max-w-4xl mx-auto px-4 py-8' },
+                    e('div', { className: 'bg-white rounded-2xl shadow-xl p-8 md:p-12 min-h-[600px]' },
+                        e('div', { className: 'mb-6' },
+                            e('div', { className: 'flex items-center gap-3 mb-4' },
+                                e('span', { className: 'text-4xl' }, pages[currentPage].icon),
+                                e('div', null,
+                                    e('p', { className: 'text-sm text-gray-500' }, `Chapter ${currentPage + 1} of ${pages.length}`),
+                                    e('h2', { className: 'text-2xl font-bold text-gray-800' }, pages[currentPage].title)
+                                )
+                            )
+                        ),
+                        e('div', { className: 'prose max-w-none' }, pages[currentPage].content)
+                    ),
+
+                    // Navigation
+                    e('div', { className: 'flex justify-between items-center mt-8' },
+                        e('button', {
+                            onClick: () => handlePageChange(currentPage - 1),
+                            disabled: currentPage === 0,
+                            className: `flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                                currentPage === 0
+                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
+                            }`
+                        },
+                            e(ChevronLeft),
+                            'Previous'
+                        ),
+                        e('div', { className: 'text-center' },
+                            e('p', { className: 'text-sm text-gray-600' }, `Page ${currentPage + 1} of ${pages.length}`)
+                        ),
+                        e('button', {
+                            onClick: () => handlePageChange(currentPage + 1),
+                            disabled: currentPage === pages.length - 1,
+                            className: `flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                                currentPage === pages.length - 1
+                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md hover:shadow-lg'
+                            }`
+                        },
+                            'Next',
+                            e(ChevronRight)
+                        )
+                    )
+                )
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(e(DataEBook));
+    </script>
+</body>
+</html>
